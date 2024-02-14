@@ -1,4 +1,5 @@
 # mybays.sh
+```
 LSI Controllers configurable visual bay representation with ZFS integration
 
 Currently External shelves are not supported, since I do not have any to test with.
@@ -86,4 +87,4 @@ root@server:~# mybays.sh -z
 |                  |                  |                  | S39KNX0HA00082N  |
 |                  |                  |                  | 5002538d414d062a |
 +------------------+------------------+------------------+------------------+
-
+```
