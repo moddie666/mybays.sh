@@ -32,7 +32,7 @@ CONFIG: /etc/mybays.sh.conf
 1:15|1:14|1:13|1:12|
 
 #----------------------------------------------------------------------#
-#THE CONFIG FILE
+THE CONFIG FILE
 root@server:~# cat /etc/mybays.sh.conf 
 BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "0:7 0:6 0:5 0:4" #CTL1
@@ -45,7 +45,7 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
 #PRINTF WIDTH PER SLOT
 wmax=19
 
-
+#----------------------------------------------------------------------#
 EXAMPLE OUTPUT WITH ZFS INFO AND SOME UNPOPULATED BAYS, ON A 24 BAY CHASSIS:
 (without -z the "<status> <read-err> <write-err> <cksum-err>" is omitted)
 root@server:~# mybays.sh -z
