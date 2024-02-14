@@ -1,6 +1,7 @@
 # mybays.sh
 ```
 LSI Controllers configurable visual bay representation with ZFS integration
+#----------------------------------------------------------------------#
 
 Currently External shelves are not supported, since I do not have any to test with.
 It should work with any number of lsi HBAs connected in a single chassis.
@@ -35,6 +36,7 @@ CONFIG: /etc/mybays.sh.conf
 ```
 #----------------------------------------------------------------------#
 THE CONFIG FILE
+#----------------------------------------------------------------------#
 root@server:~# cat /etc/mybays.sh.conf 
 BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "0:7 0:6 0:5 0:4" #CTL1
@@ -50,6 +52,7 @@ wmax=19
 ```
 #----------------------------------------------------------------------#
 EXAMPLE OUTPUT WITH ZFS INFO AND SOME UNPOPULATED BAYS, ON A 24 BAY CHASSIS:
+#----------------------------------------------------------------------#
 (without -z the "<status> <read-err> <write-err> <cksum-err>" is omitted)
 root@server:~# mybays.sh -z
 +------------------+------------------+------------------+------------------+
