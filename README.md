@@ -10,6 +10,7 @@ If sas2ircu list/display output is provided shelf support may be possible with r
 ```
 #----------------------------------------------------------------------#
 HELP OUTPUT, INCLUDING CURRENT CONFIGURATION
+#----------------------------------------------------------------------#
 root@server:~# mybays.sh -h
 mybays.sh [-z|-h]
 OPTIONS:
