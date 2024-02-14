@@ -5,7 +5,8 @@ LSI Controllers configurable visual bay representation with ZFS integration
 Currently External shelves are not supported, since I do not have any to test with.
 It should work with any number of lsi HBAs connected in a single chassis.
 If sas2ircu list/display output is provided shelf support may be possible with reasonable effort.
-
+```
+```
 #----------------------------------------------------------------------#
 HELP OUTPUT, INCLUDING CURRENT CONFIGURATION
 root@server:~# mybays.sh -h
@@ -30,7 +31,8 @@ CONFIG: /etc/mybays.sh.conf
 0:15|0:14|0:13|0:12|
 ---------------
 1:15|1:14|1:13|1:12|
-
+```
+```
 #----------------------------------------------------------------------#
 THE CONFIG FILE
 root@server:~# cat /etc/mybays.sh.conf 
@@ -44,7 +46,8 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
           )
 #PRINTF WIDTH PER SLOT
 wmax=19
-
+```
+```
 #----------------------------------------------------------------------#
 EXAMPLE OUTPUT WITH ZFS INFO AND SOME UNPOPULATED BAYS, ON A 24 BAY CHASSIS:
 (without -z the "<status> <read-err> <write-err> <cksum-err>" is omitted)
