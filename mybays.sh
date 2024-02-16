@@ -3,14 +3,14 @@
 #
 
 ME=$(basename $0)
-DEPS=sas2ircu
-for d in DEPS
-do if [ "x$(which $d)" = "x"
+DEPS="sas2ircu"
+for d in $DEPS
+do if [ "x$(which $d)" = "x" ]
    then missing+=" $d"
    fi
 done
 if [ "x$missing" != "x" ]
-then echo "Missing dependency: $missing"
+then echo "Missing dependency:$missing!"
      exit 1
 fi
 ################
