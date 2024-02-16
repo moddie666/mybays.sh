@@ -3,12 +3,21 @@
 #
 
 ME=$(basename $0)
-
+DEPS=sas2ircu
+for d in DEPS
+do if [ "x$(which $d)" = "x"
+   then missing+=" $d"
+   fi
+done
+if [ "x$missing" != "x" ]
+then echo "Missing dependency: $missing"
+     exit 1
+fi
 ################
 #    CONFIG    #
 ################
 #ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
-#FORMAT (CTL#):(SLOT#)
+#FORMAT (CTL#):(SLOT#) Numbers as reported by sas2ircu
 # CUSTOMIZE THIS OR CREATE YOUR OWN CONFIG IN /etc/<script-name>.conf TO FIT YOUR CHASSIS!
 BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "0:7 0:6 0:5 0:4" #CTL1
