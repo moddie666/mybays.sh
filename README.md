@@ -1,6 +1,6 @@
 # mybays.sh
 ```
-LSI Controllers configurable visual bay representation with ZFS integration
+LSI (sas2ircu) Controllers configurable visual bay representation with ZFS integration
 #----------------------------------------------------------------------#
 
 Currently External shelves are not supported, since I do not have any to test with.
