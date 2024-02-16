@@ -5,7 +5,7 @@
 ME=$(basename $0)
 DEPS=sas2ircu
 for d in DEPS
-do if [ "x$(which $d)" = "x"
+do if [ "x$(which $d)" = "x" ]
    then missing+=" $d"
    fi
 done
