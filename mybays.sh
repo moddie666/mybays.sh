@@ -74,7 +74,6 @@ fi
 #####################
 #    GATHER DATA    #
 #####################
-
 1>&2 echo -en "Emumerating Controllers\r"
 CTL=$(sas2ircu list | egrep -o '^\s+[0-9]+' | awk '{print $1}')
 
