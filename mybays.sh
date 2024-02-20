@@ -45,7 +45,8 @@ ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
 FORMAT (CTL#):(SLOT#)
 $CF
 $(for line in "${BAYLINES[@]}"
-do echo "---------------"
+do echo "---------------------"
+   echo -n '|'
    for i in $line
    do echo -n "$i|"
    done
