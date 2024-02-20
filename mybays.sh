@@ -31,6 +31,8 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
 wmax=19
 if [ -f "/etc/$ME.conf" ]
 then source /etc/$ME.conf
+     CF="CONFIG in /etc/$ME.conf"
+else CF="CONFIG in $ME"
 fi
 
 USAGE="$ME [-z|-h]
@@ -41,7 +43,7 @@ OPTIONS:
 CURRENT BAY CONFIG:
 ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
 FORMAT (CTL#):(SLOT#)
-CONFIG: /etc/$ME.conf
+$CF
 $(for line in "${BAYLINES[@]}"
 do echo "---------------"
    for i in $line
