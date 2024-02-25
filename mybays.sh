@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# https://github.com/moddie666/mybays.sh
 #
 
 ME=$(basename $0)
