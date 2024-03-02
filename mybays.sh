@@ -39,12 +39,16 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
           )
 #PRINTF WIDTH PER SLOT
 wmax=18
+
 #INFO ITEMS PRINTED FOR EACH BAY
 LINE_ITEMS="mdl_line size_line ser_line wwn_line"
 # mdl_line  ... model string
 # size_line ... size in MB
 # ser_line  ... serial 
 # wwn_line  ... wwn
+
+#PRINT ZFS LINE BY DEFAULT? (on/off)
+ZFS_DEFAULT=off
 
 if [ -f "/etc/$ME.conf" ]
 then source /etc/$ME.conf
@@ -84,6 +88,9 @@ do case $1 in
                   shift;;
    esac
 done
+if [ "$ZFS_DEFAULT" = "on" ] && [ "x$ZS" = "x" ]
+then ZS=$(zpool status -L | awk '{print $1, $2, $3, $4, $5}'| sed -n '/NAME STATE READ WRITE CKSUM/,$p')
+fi
 if [ "$EXIT" = "1" ]
 then exit $EXIT
 fi
