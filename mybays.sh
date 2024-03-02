@@ -13,12 +13,21 @@ if [ "x$missing" != "x" ]
 then echo "Missing dependency:$missing!"
      exit 1
 fi
+#--- COLORS ---#
+nc=$(tput sgr 0)
+rd=$(tput setaf 9)
+gr=$(tput setaf 10)
+yl=$(tput setaf 11)
+cy=$(tput setaf 14)
+
 ################
 #    CONFIG    #
 ################
-#ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
-#FORMAT (CTL#):(SLOT#) Numbers as reported by sas2ircu
+#
+# ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
+# FORMAT (CTL#):(SLOT#) Numbers as reported by sas2ircu
 # CUSTOMIZE THIS OR CREATE YOUR OWN CONFIG IN /etc/<script-name>.conf TO FIT YOUR CHASSIS!
+#
 BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "0:7 0:6 0:5 0:4" #CTL1
    "1:7 1:6 1:5 1:4" #CTL2
@@ -28,7 +37,7 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "1:15 1:14 1:13 1:12" #$CTL2
           )
 #PRINTF WIDTH PER SLOT
-wmax=19
+wmax=18
 if [ -f "/etc/$ME.conf" ]
 then source /etc/$ME.conf
      CF="CONFIG in /etc/$ME.conf"
@@ -129,7 +138,7 @@ done
 #TO FILL HORIZONTAL LINES WITH INFORMATION
 head_line(){
   for slot in $@
-  do printf "%-${wmax}s" "| BAY ${BAY[$slot]}: ${DEV[$slot]}"
+  do printf "|%-${wmax}s" " BAY ${BAY[$slot]}: ${DEV[$slot]}"
   done
 }
 zfs_line(){
@@ -146,7 +155,12 @@ zfs_line(){
   fi
   #OTHERWISE PRINT LINE
   for slot in $@
-  do printf "%-${wmax}s" "| ${ZFS[$slot]}"
+  do if egrep "^ONLINE 0 0 0$" <<< "${ZFS[$slot]}" &>/dev/null
+     then printf "|$gr%-${wmax}s$nc" " ${ZFS[$slot]}"
+     elif [ "x${ZFS[$slot]}" = "x" ] && [ "x${DEV[$slot]}" != "x" ]
+     then printf "|$cy%-${wmax}s$nc" " not in any pool"
+     else printf "|$yl%-${wmax}s$nc" " ${ZFS[$slot]}"
+     fi
   done
 }
 wwn_line(){
@@ -160,7 +174,7 @@ wwn_line(){
   then return 1
   fi
   for slot in $@
-  do printf "%-${wmax}s" "| ${WWN[$slot]}"
+  do printf "|%-${wmax}s" " ${WWN[$slot]}"
   done
 }
 size_line(){
@@ -174,7 +188,7 @@ size_line(){
   then return 1
   fi
   for slot in $@
-  do printf "%-${wmax}s" "| ${MBS[$slot]}"
+  do printf "|%-${wmax}s" " ${MBS[$slot]}"
   done
 }
 mdl_line(){
@@ -188,7 +202,7 @@ mdl_line(){
   then return 1
   fi
   for slot in $@
-  do printf "%-${wmax}s" "| ${MDL[$slot]}"
+  do printf "|%-${wmax}s" " ${MDL[$slot]}"
   done
 }
 ser_line(){
@@ -202,11 +216,11 @@ ser_line(){
   then return 1
   fi
   for slot in $@
-  do printf "%-${wmax}s" "| ${SER[$slot]}"
+  do printf "|%-${wmax}s" " ${SER[$slot]}"
   done
 }
 sep_fill(){ #MAKE SEPARATOR FILLER
-  cdown=$((wmax-1))
+  cdown=$wmax
   while [ $cdown -gt 0 ]
   do echo -n '-'
      cdown=$((cdown-1))
