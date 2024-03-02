@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# https://github.com/moddie666/mybays.sh
 #
 
 ME=$(basename $0)
@@ -38,6 +39,13 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
           )
 #PRINTF WIDTH PER SLOT
 wmax=18
+#INFO ITEMS PRINTED FOR EACH BAY
+LINE_ITEMS="mdl_line size_line ser_line wwn_line"
+# mdl_line  ... model string
+# size_line ... size in MB
+# ser_line  ... serial 
+# wwn_line  ... wwn
+
 if [ -f "/etc/$ME.conf" ]
 then source /etc/$ME.conf
      CF="CONFIG in /etc/$ME.conf"
@@ -245,9 +253,8 @@ do head_line $line
    if [ ! -z "$ZS" ]
    then zfs_line $line && echo '|'
    fi
-   mdl_line $line && echo '|'
-   size_line $line && echo '|'
-   ser_line $line && echo '|'
-   wwn_line $line && echo '|'
+   for info in $LINE_ITEMS
+   do $info $line && echo '|'
+   done
    sep_line
 done
