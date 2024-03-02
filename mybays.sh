@@ -26,16 +26,20 @@ cy=$(tput setaf 14)
 ################
 #
 # ENCLOSURE INFO, HORIZONTAL EACH ELEMENT REPRESENTS A LINE OF BAYS
-# FORMAT (CTL#):(SLOT#) Numbers as reported by sas2ircu
+# FORMAT (BAY_DEF):(CTL#):(SLOT#) 
+# CTL/SLOT# ... Numbers as reported by sas2ircu
+# BAY_DEF   ... Your custom bay definition (i.e. numbering, any chars except ":" allowed.
+#               Just take into account wmax per bay.
+# NOTE: Using ":" in BAY_DEF WILL BREAK output.
 # CUSTOMIZE THIS OR CREATE YOUR OWN CONFIG IN /etc/<script-name>.conf TO FIT YOUR CHASSIS!
 #
 BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
-   "0:7 0:6 0:5 0:4" #CTL1
-   "1:7 1:6 1:5 1:4" #CTL2
-   "0:11 0:10 0:9 0:8" #$CTL1
-   "1:11 1:10 1:9 1:8" #$CTL2
-   "0:15 0:14 0:13 0:12" #$CTL1
-   "1:15 1:14 1:13 1:12" #$CTL2
+   "1:0:7 2:0:6 3:0:5 4:0:4" #CTL1
+   "5:1:7 6:1:6 7:1:5 8:1:4" #CTL2
+   "9:0:11 10:0:10 11:0:9 12:0:8" #$CTL1
+   "13:1:11 14:1:10 15:1:9 16:1:8" #$CTL2
+   "17:0:15 18:0:14 19:0:13 20:0:12" #$CTL1
+   "21:1:15 22:1:14 23:1:13 24:1:12" #$CTL2
           )
 #PRINTF WIDTH PER SLOT
 wmax=18
@@ -128,21 +132,21 @@ done
 declare -A CONNS
 eval "$(listconns)"
 1>&2 echo -en "Formatting Data       \r"
-bay=1
+#bay=1
 for line in "${BAYLINES[@]}"
 do declare -A BAY MBS MDL SER WWN DEV ZFS
-   for slot in $line
-   do #dev=$(readlink -e /dev/disk/by-id/wwn-0x$(awk -F: '{print $4}'))
+   for def in $line
+   do slot="$(awk -F: '{print $2":"$3}' <<< "$def")" # EXTRACT sas2ircu SLOT DEFINITION FROM CONFIG
+      BAY[$slot]="$(awk -F: '{print $1}' <<< "$def")"
       MBS[$slot]="$(awk -F: '{print $1}' <<< "${CONNS[$slot]}"|sed -r 's#/.*# MB#g')"
       MDL[$slot]="$(awk -F: '{print $2}' <<< "${CONNS[$slot]}")"
       SER[$slot]="$(awk -F: '{print $3}' <<< "${CONNS[$slot]}")"
       WWN[$slot]="$(awk -F: '{print $4}' <<< "${CONNS[$slot]}")"
       DEV[$slot]="$(readlink -e /dev/disk/by-id/wwn-0x$(awk -F: '{print $4}' <<< "${CONNS[$slot]}"))"
-      BAY[$slot]="$bay"
       if [ ! -z "$ZS" ]
       then ZFS[$slot]="$(egrep "^$(basename ${DEV[$slot]} 2>/dev/null) " <<< "$ZS" |sed -r "s#$(basename ${DEV[$slot]} 2>/dev/null) ##g")"
       fi
-      bay=$((bay+1))
+#      bay=$((bay+1))
    done
 done
 
@@ -255,13 +259,14 @@ sep_line(){ #SEPERATOR LINE GENERATION WITH "+" AT EACH END
 ##########################
 sep_line
 for line in "${BAYLINES[@]}"
-do head_line $line
+do slots=$(sed -r 's#[^ ]+:([0-9]+:[0-9]+)#\1#g' <<< "$line") #CONVERT FROM BAY:CTL:SLOT to CTL:SLOT
+   head_line $slots
    echo '|'
    if [ ! -z "$ZS" ]
-   then zfs_line $line && echo '|'
+   then zfs_line $slots && echo '|'
    fi
    for info in $LINE_ITEMS
-   do $info $line && echo '|'
+   do $info $slots && echo '|'
    done
    sep_line
 done
