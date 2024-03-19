@@ -15,11 +15,20 @@ then echo "Missing dependency:$missing!"
      exit 1
 fi
 #--- COLORS ---#
+colors=$(tput colors)
 nc=$(tput sgr 0)
-rd=$(tput setaf 9)
-gr=$(tput setaf 10)
-yl=$(tput setaf 11)
-cy=$(tput setaf 14)
+if [ "$colors" = "8" ]
+then rd=$(tput setaf 1)
+     gr=$(tput setaf 2)
+     yl=$(tput setaf 3)
+     cy=$(tput setaf 6)
+elif [ "$colors" -gt "8" ]
+then rd=$(tput setaf 9)
+     gr=$(tput setaf 10)
+     yl=$(tput setaf 11)
+     cy=$(tput setaf 14)
+fi
+
 
 ################
 #    CONFIG    #
@@ -117,7 +126,7 @@ listconns(){ #list disk info for connected lsi hba slots, output as array for la
 for k in ${!CTLS[@]}
 do #echo -e "\n#--- $k ---#"
    ctr=0
-   for i in $(echo "${CTLS[$k]}" | sed -r 's# ##g' | awk -F: '{print $2}')
+   for i in $(echo "${CTLS[$k]}" | sed -r 's#^.* : ##g;s# #_#g') # | awk -F: '{print $2}')
    do echo "${k}:${i}"
    done | while read -r line
           do if egrep '^[0-9]+:[0-9]+$' <<< "$line" &>/dev/null
@@ -158,13 +167,16 @@ done
 head_line(){
   for slot in $@
   do printf "|%-${wmax}s" " BAY ${BAY[$slot]}: ${DEV[$slot]}"
+     if [ "x${DEV[$slot]}" != "x" ]
+     then hasdisk=1
+     fi
   done
 }
 zfs_line(){
   unset hasdata
   #FIRST CHECK IF THERE IS DATA ON THE LINE  
   for slot in $@
-  do if [ ! -z "${ZFS[$slot]}" ]
+  do if [ ! -z "${ZFS[$slot]}" ] || [ "$hasdisk" = "1" ]
      then hasdata=yes
      fi
   done
@@ -269,4 +281,5 @@ do slots=$(sed -r 's#[^ ]+:([0-9]+:[0-9]+)#\1#g' <<< "$line") #CONVERT FROM BAY:
    do $info $slots && echo '|'
    done
    sep_line
+   hasdisk=0 #TO SHOW ZFS lINE ON LINES WITH DISKS BUT NONE HAVE ZFS SET TO 1 IN head_line
 done
