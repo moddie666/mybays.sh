@@ -167,13 +167,16 @@ done
 head_line(){
   for slot in $@
   do printf "|%-${wmax}s" " BAY ${BAY[$slot]}: ${DEV[$slot]}"
+     if [ "x${DEV[$slot]}" != "x" ]
+     then hasdisk=1
+     fi
   done
 }
 zfs_line(){
   unset hasdata
   #FIRST CHECK IF THERE IS DATA ON THE LINE  
   for slot in $@
-  do if [ ! -z "${ZFS[$slot]}" ]
+  do if [ ! -z "${ZFS[$slot]}" ] || [ "$hasdisk" = "1" ]
      then hasdata=yes
      fi
   done
@@ -278,4 +281,5 @@ do slots=$(sed -r 's#[^ ]+:([0-9]+:[0-9]+)#\1#g' <<< "$line") #CONVERT FROM BAY:
    do $info $slots && echo '|'
    done
    sep_line
+   hasdisk=0 #TO SHOW ZFS lINE ON LINES WITH DISKS BUT NONE HAVE ZFS SET TO 1 IN head_line
 done
