@@ -126,7 +126,7 @@ listconns(){ #list disk info for connected lsi hba slots, output as array for la
 for k in ${!CTLS[@]}
 do #echo -e "\n#--- $k ---#"
    ctr=0
-   for i in $(echo "${CTLS[$k]}" | sed -r 's# ##g' | awk -F: '{print $2}')
+   for i in $(echo "${CTLS[$k]}" | sed -r 's#^.* : ##g;s# #_#g') # | awk -F: '{print $2}')
    do echo "${k}:${i}"
    done | while read -r line
           do if egrep '^[0-9]+:[0-9]+$' <<< "$line" &>/dev/null
