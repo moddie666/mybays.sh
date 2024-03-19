@@ -41,10 +41,10 @@ BAYLINES=( #"BAYS" (0|1):[0-3] are not connected to the backplane
    "17:0:15 18:0:14 19:0:13 20:0:12" #$CTL1
    "21:1:15 22:1:14 23:1:13 24:1:12" #$CTL2
           )
-#PRINTF WIDTH PER SLOT
+# PRINTF WIDTH PER SLOT
 wmax=18
 
-#INFO ITEMS PRINTED FOR EACH BAY
+# INFO ITEMS PRINTED FOR EACH BAY
 LINE_ITEMS="mdl_line size_line ser_line wwn_line"
 # mdl_line  ... model string
 # size_line ... size in MB
@@ -153,8 +153,8 @@ done
 #########################
 #    OUPUT FUNCTIONS    #
 #########################
-#OUTPUT FUNCTIONS TAKE SLOT NUMBERS (from sas2ircu output)
-#TO FILL HORIZONTAL LINES WITH INFORMATION
+# OUTPUT FUNCTIONS TAKE SLOT NUMBERS (from sas2ircu output)
+# TO FILL HORIZONTAL LINES WITH INFORMATION
 head_line(){
   for slot in $@
   do printf "|%-${wmax}s" " BAY ${BAY[$slot]}: ${DEV[$slot]}"
