@@ -15,11 +15,20 @@ then echo "Missing dependency:$missing!"
      exit 1
 fi
 #--- COLORS ---#
+colors=$(tput colors)
 nc=$(tput sgr 0)
-rd=$(tput setaf 9)
-gr=$(tput setaf 10)
-yl=$(tput setaf 11)
-cy=$(tput setaf 14)
+if [ "$colors" = "8" ]
+then rd=$(tput setaf 1)
+     gr=$(tput setaf 2)
+     yl=$(tput setaf 3)
+     cy=$(tput setaf 6)
+elif [ "$colors" -gt "8" ]
+then rd=$(tput setaf 9)
+     gr=$(tput setaf 10)
+     yl=$(tput setaf 11)
+     cy=$(tput setaf 14)
+fi
+
 
 ################
 #    CONFIG    #
